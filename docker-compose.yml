@@ -9,7 +9,7 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - TZ=America/Argentina/Buenos_Aires
     volumes:
-      - ~/docker/mariadb:/config
+      - ./mariadb:/config
     ports:
       - 3306:3306
     restart: unless-stopped
