@@ -45,6 +45,11 @@ services:
   node-red:
     image: nodered/node-red:latest
     container_name: node-red
+    environment:
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_USER_PASS=${MARIADB_USER_PASS}
+      - MARIADB_DB=${MARIADB_DB}
+      - MARIADB_SERVER=${MARIADB_SERVER}
     ports:
       - 1880:1880
     volumes:
