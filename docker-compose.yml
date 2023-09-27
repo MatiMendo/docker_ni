@@ -50,6 +50,7 @@ services:
       - MARIADB_USER_PASS=${MARIADB_USER_PASS}
       - MARIADB_DB=${MARIADB_DB}
       - MARIADB_SERVER=${MARIADB_SERVER}
+      - TOKEN=${TOKEN}
     ports:
       - 1880:1880
     volumes:
