@@ -10,27 +10,36 @@ from settings import SERVIDOR_MQTT
 from umqtt.robust import MQTTClient
 
 CLIENT_ID = ubinascii.hexlify(unique_id()).decode('utf-8')
-
 mqtt = MQTTClient(CLIENT_ID, SERVIDOR_MQTT,
                   port=1883, keepalive=180)
 
 sw = Pin(23, Pin.IN)
 led = Pin(2, Pin.OUT)
 d = dht.DHT11(Pin(25))
-
+global contador
+contador=0
 def sub_cb(topic, msg):
     print((topic, msg))
     if msg==b"apagar":
         led.value(0)
+        mqtt.publish(f"iot/{CLIENT_ID}/estado",b"0")
     if msg==b"encender":
         led.value(1)
+        mqtt.publish(f"iot/{CLIENT_ID}/estado",b"1")
+
 
 mqtt.set_callback(sub_cb)
 mqtt.connect()
 mqtt.subscribe(f"iot/{CLIENT_ID}/comando")
 
-def transmitir(pin):
+def transmitir(pin,contador):
     mqtt.publish(f"iot/{CLIENT_ID}",datos)
+    if contador==2:
+        mqtt.publish(f"iot/{CLIENT_ID}/analogico",datos)
+        contador=0
+    else:
+        contador+=1
+
 
 timer1 = Timer(1)
 timer1.init(period=20000, mode=Timer.PERIODIC, callback=transmitir)
